@@ -47,4 +47,6 @@
     <string name="share_proof_action">Share Proof</string>
     <string name="action_generate">Generate Proof</string>
     <string name="proof_error_message_final">We were unable to generate proof for this file.</string>
+    <string name="title_activity_tabbet">Tabbet</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

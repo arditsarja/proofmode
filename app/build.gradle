@@ -5,12 +5,12 @@ android {
     buildToolsVersion "27.0.3"
 
     lintOptions {
-          abortOnError false
-     }
+        abortOnError false
+    }
 
     defaultConfig {
         applicationId "org.witness.proofmode"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 112
         versionName "0.0.11-beta-2"
@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:support-compat:27.1.0'
