@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="app_name">ProofMode</string>
+    <string name="app_name">Lexally</string>
 
     <string name="action_settings">Paramètres</string>
     <string name="action_share_key">Partager une clé publique...</string>
     <string name="action_publish_key">Publier une clé publique...</string>
+    <string name="verification_api_key">My_Key</string>
 
     <string name="action_about">À propos de ProofMode</string>
 

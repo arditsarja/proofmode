@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">ProofMode</string>
+    <string name="app_name">Lexally</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_share_key">Share Public Key...</string>
     <string name="action_publish_key">Publish Public Key...</string>
+    <string name="verification_api_key">My_Key</string>
 
     <string name="action_about">About ProofMode</string>
 

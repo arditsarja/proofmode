@@ -20,7 +20,7 @@
     <ImageView
         android:layout_width="256dp"
         android:layout_height="256dp"
-        android:src="@drawable/proofmode512"
+        android:src="@drawable/ic_logo"
         />
 
     <android.support.v7.widget.SwitchCompat
@@ -68,7 +68,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/include_mobile_network"
-        android:checked="false"
+        android:checked="true"
         android:id="@+id/switchCellInfo"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/colorPrimaryAlt"
