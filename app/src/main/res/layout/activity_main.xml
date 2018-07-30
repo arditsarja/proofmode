@@ -6,33 +6,12 @@
     android:fitsSystemWindows="true"
     tools:context="org.witness.proofmode.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.NoActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimaryAlt"
-            android:icon="@mipmap/ic_launcher"
-            android:text="hghg"
-
-            >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20px"
-                android:src="@mipmap/ic_launcher" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_logo" />
-
-        </android.support.v7.widget.Toolbar>
+        <include layout="@layout/toolbar" />
     </android.support.design.widget.AppBarLayout>
 
     <include

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, 1);
         }
-
+        goOnTest();
 
     }
 
@@ -189,9 +190,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void goOnTest(View v) {
+        goOnTest();
+    }
+    private void goOnTest (){
         startActivity(new Intent(this, Main2Activity.class));
     }
-
     private boolean askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
 
