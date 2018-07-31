@@ -28,6 +28,9 @@
         android:name="android.permission.READ_PHONE_STATE"
         tools:remove="android:maxSdkVersion" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission
+        android:name="android.permission.MEDIA_CONTENT_CONTROL"
+        tools:remove="android:maxSdkVersion" />
 
     <application
         android:name=".ProofModeApp"
@@ -46,11 +49,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Main2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".PMAppIntro" />
-
         <receiver
             android:name=".OnBootReceiver"
             android:enabled="true"
@@ -131,7 +137,7 @@
         <service
             android:name=".service.MediaListenerService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
         <service
             android:name=".service.PhotosContentJob"
             android:exported="true"

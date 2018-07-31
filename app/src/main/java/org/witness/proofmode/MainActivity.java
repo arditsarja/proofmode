@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -113,8 +114,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, 1);
         }
-        goOnTest();
-
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{android.Manifest.permission.CAMERA},
+                        12345);
+            }
+        }
     }
 
     @Override
@@ -192,9 +197,19 @@ public class MainActivity extends AppCompatActivity {
     public void goOnTest(View v) {
         goOnTest();
     }
-    private void goOnTest (){
+
+    public void goOnTest2(View v) {
+        goOnTest2();
+    }
+
+    private void goOnTest() {
+        startActivity(new Intent(this, AddImageActivity.class));
+    }
+
+    private void goOnTest2() {
         startActivity(new Intent(this, Main2Activity.class));
     }
+
     private boolean askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
 
