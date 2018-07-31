@@ -54,7 +54,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.5.1'
 
     implementation 'com.eternitywall:opentimestamps:0.1.14'
-
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile "com.android.support:support-v4:27.1.0"
