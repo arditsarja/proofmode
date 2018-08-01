@@ -6,7 +6,7 @@
     <string name="action_publish_key">Publish Public Key...</string>
     <string name="change_permissions">Change Permissions</string>
     <string name="verification_api_key">My_Key</string>
-Ardit
+    Ardit
     <string name="action_about">About ProofMode</string>
 
     <string name="switch_include_device">Include Device Identity</string>
@@ -50,4 +50,8 @@ Ardit
     <string name="proof_error_message_final">We were unable to generate proof for this file.</string>
     <string name="title_activity_tabbet">Tabbet</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

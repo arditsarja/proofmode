@@ -52,11 +52,11 @@
             android:padding="6dip"
             android:paddingRight="6dip"
             android:src="@android:drawable/ic_menu_camera" />
-        <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="goOnTest2"
-            android:layout_marginLeft="100dp"
-        android:text="GoToTest2"/>
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:onClick="goOnTest2"-->
+            <!--android:layout_marginLeft="100dp"-->
+        <!--android:text="GoToTest2"/>-->
     </android.support.design.widget.BottomNavigationView>
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,7 @@ import org.witness.proofmode.crypto.PgpUtils;
 import org.witness.proofmode.util.GPSTracker;
 import org.witness.proofmode.utils.DefaultCallback;
 import org.witness.proofmode.utils.EasyImage;
+import org.witness.proofmode.utils.ImageAdapter;
 import org.witness.proofmode.utils.ImagesAdapter;
 
 import java.io.File;
@@ -64,13 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<File> photos = new ArrayList<>();
     CameraPhoto cameraPhoto;
     private ImageAdapter imageAdapter;
-    private int count;
-    private Bitmap[] thumbnails;
-    private boolean[] thumbnailsselection;
-    private String[] arrPath;
-    ArrayList<String> fileList = new ArrayList<String>();// list of file paths
-    ArrayList<String> fileLisst = new ArrayList<String>();// list of file paths
-    File[] listFile;
+
+
     GridView imagegrid;
     View contentMain, contentMedia;
     ImageButton showContentMediaButton;
@@ -170,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
                         12345);
             }
         }
-        getFromSdcard();
+
         imagegrid = (GridView) findViewById(R.id.surfaceView);
-        imageAdapter = new ImageAdapter();
+        imageAdapter = new ImageAdapter(this);
         imagegrid.setAdapter(imageAdapter);
         Nammu.init(this);
 
@@ -289,96 +286,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void getFromSdcard() {
-        File file = null;
-        String path = Environment.getExternalStorageDirectory().toString() + "/Pictures/Lexally";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //use this if Lollipop_Mr1 (API 22) or above
-            file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        } else {
-
-            file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        }
-        file = new File(path);
-//        File file= new File(android.os.Environment.getExternalStorageDirectory(),"Lexally");
-        if (file.isDirectory()) {
-            listFile = file.listFiles();
-            for (int i = 0; i < listFile.length; i++) {
-                fileList.add(listFile[i].getAbsolutePath());
-            }
-        }
-    }
-
-    public class ImageAdapter extends BaseAdapter {
-        private LayoutInflater mInflater;
-
-        public ImageAdapter() {
-            mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        public int getCount() {
-            return fileList.size();
-        }
-
-        public Object getItem(int position) {
-            return position;
-        }
-
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public void changeLayout() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    notifyDataSetChanged();
-                }
-            });
-        }
 
 
-        public void add(String s) {
-//        this.values.add(0, message);
-            fileList.add(s);
-            changeLayout();
 
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final int thePosition = position;
-            ViewHolder holder;
-            if (convertView == null) {
-                holder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.gelleryitem, null);
-                holder.imageview = (ImageView) convertView.findViewById(R.id.thumbImage);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            Bitmap myBitmap = BitmapFactory.decodeFile(fileList.get(position));
-            holder.imageview.setImageBitmap(myBitmap);
-//            holder.imageview.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    File file = new File(fileList.get(thePosition));
-//
-//                    Intent intent = new Intent();
-//                    intent.setAction(Intent.ACTION_VIEW);
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //use this if Lollipop_Mr1 (API 22) or above
-//                        intent.setDataAndType(FileProvider.getUriForFile(getApplicationContext(), getApplication().getPackageName() + ".provider", file), "image/*");
-//                    } else {
-//                        intent.setDataAndType(Uri.fromFile(file), "image/*");
-//                    }
-//                    startActivity(intent);
-//                }
-//            });
-            return convertView;
-        }
-    }
-
-    class ViewHolder {
-        ImageView imageview;
-    }
 
 
     @Override
@@ -419,11 +329,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openCamera(View view) {
-        try {
-            startActivityForResult(cameraPhoto.takePhotoIntent(), 12345);
-        } catch (Exception e) {
-            Log.v("Message error", e.getMessage());
-        }
+        EasyImage.openCameraForImage(MainActivity.this, 0);
 
     }
 
@@ -618,6 +524,9 @@ public class MainActivity extends AppCompatActivity {
         unregisterManagers();
     }
     private void onPhotosReturned(List<File> returnedPhotos) {
+        for (File file : returnedPhotos){
+            imageAdapter.add(file.getAbsolutePath());
+        }
         photos.addAll(returnedPhotos);
         imagesAdapter.notifyDataSetChanged();
         recyclerView.scrollToPosition(photos.size() - 1);

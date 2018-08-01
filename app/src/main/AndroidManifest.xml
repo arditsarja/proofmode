@@ -53,10 +53,12 @@
             android:name=".Main2Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddImageActivity"
+        <activity
+            android:name=".AddImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".PMAppIntro" />
+
         <receiver
             android:name=".OnBootReceiver"
             android:enabled="true"
@@ -166,7 +168,11 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-
+        <activity
+            android:name=".FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>
