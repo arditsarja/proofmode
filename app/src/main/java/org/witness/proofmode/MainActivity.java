@@ -1,29 +1,42 @@
 package org.witness.proofmode;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
+import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.witness.proofmode.crypto.PgpUtils;
 import org.witness.proofmode.util.GPSTracker;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,16 +46,37 @@ public class MainActivity extends AppCompatActivity {
 
     private PgpUtils mPgpUtils;
 
+    CameraPhoto cameraPhoto;
+    private ImageAdapter imageAdapter;
+    private int count;
+    private Bitmap[] thumbnails;
+    private boolean[] thumbnailsselection;
+    private String[] arrPath;
+    ArrayList<String> fileList = new ArrayList<String>();// list of file paths
+    ArrayList<String> fileLisst = new ArrayList<String>();// list of file paths
+    File[] listFile;
+
+    View contentMain, contentMedia;
+    ImageButton showContentMediaButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        contentMain = (View) findViewById(R.id.content_main);
+        contentMedia = (View) findViewById(R.id.content_media);
+        showContentMediaButton = (ImageButton) findViewById(R.id.show_content_media_btn);
+        showContentMediaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePermisions();
+            }
+        });
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
-
+        cameraPhoto = new CameraPhoto(this);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         SwitchCompat switchProof = findViewById(R.id.switchProof);
         switchProof.setChecked(mPrefs.getBoolean("doProof", true));
 
@@ -120,7 +154,102 @@ public class MainActivity extends AppCompatActivity {
                         12345);
             }
         }
+        getFromSdcard();
+        GridView imagegrid = (GridView) findViewById(R.id.surfaceView);
+        imageAdapter = new ImageAdapter();
+        imagegrid.setAdapter(imageAdapter);
+
     }
+
+    public void getFromSdcard() {
+        File file = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //use this if Lollipop_Mr1 (API 22) or above
+            file = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        } else {
+
+            file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        }
+//        File file= new File(android.os.Environment.getExternalStorageDirectory(),"Lexally");
+        if (file.isDirectory()) {
+            listFile = file.listFiles();
+            for (int i = 0; i < listFile.length; i++) {
+                fileList.add(listFile[i].getAbsolutePath());
+            }
+        }
+    }
+
+    public class ImageAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        public ImageAdapter() {
+            mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        public int getCount() {
+            return fileList.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public void changeLayout() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+
+        public void add(String s) {
+//        this.values.add(0, message);
+            fileList.add(s);
+            changeLayout();
+
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final int thePosition = position;
+            ViewHolder holder;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = mInflater.inflate(R.layout.gelleryitem, null);
+                holder.imageview = (ImageView) convertView.findViewById(R.id.thumbImage);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            Bitmap myBitmap = BitmapFactory.decodeFile(fileList.get(position));
+            holder.imageview.setImageBitmap(myBitmap);
+//            holder.imageview.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    File file = new File(fileList.get(thePosition));
+//
+//                    Intent intent = new Intent();
+//                    intent.setAction(Intent.ACTION_VIEW);
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //use this if Lollipop_Mr1 (API 22) or above
+//                        intent.setDataAndType(FileProvider.getUriForFile(getApplicationContext(), getApplication().getPackageName() + ".provider", file), "image/*");
+//                    } else {
+//                        intent.setDataAndType(Uri.fromFile(file), "image/*");
+//                    }
+//                    startActivity(intent);
+//                }
+//            });
+            return convertView;
+        }
+    }
+
+    class ViewHolder {
+        ImageView imageview;
+    }
+
 
     @Override
     protected void onResume() {
@@ -159,6 +288,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void openCamera(View view) {
+        try {
+            startActivityForResult(cameraPhoto.takePhotoIntent(), 12345);
+        } catch (Exception e) {
+            Log.v("Message error", e.getMessage());
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -188,11 +326,29 @@ public class MainActivity extends AppCompatActivity {
             shareKey();
 
             return true;
+        } else if (id == R.id.change_permissions) {
+
+            changePermisions();
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void changePermisions() {
+        if (contentMain.getVisibility() == View.GONE) {
+            contentMedia.setVisibility(View.GONE);
+            contentMain.setVisibility(View.VISIBLE);
+            showContentMediaButton.setVisibility(View.VISIBLE);
+        } else {
+            contentMain.setVisibility(View.GONE);
+            showContentMediaButton.setVisibility(View.GONE);
+            contentMedia.setVisibility(View.VISIBLE);
+        }
+
+
+    }
 
     public void goOnTest(View v) {
         goOnTest();
@@ -280,6 +436,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_INTRO) {
             askForPermission(Manifest.permission.ACCESS_FINE_LOCATION, 1);
+        }
+        if (requestCode == 12345) {
+            cameraPhoto.addToGallery();
+            imageAdapter.add(cameraPhoto.getPhotoPath());
         }
     }
 

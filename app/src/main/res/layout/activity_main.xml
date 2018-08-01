@@ -16,9 +16,11 @@
 
     <include
         layout="@layout/content_main"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
-    <include layout="@layout/content_media" />
+    <include layout="@layout/content_media"
+        />
 
 
 </android.support.design.widget.CoordinatorLayout>

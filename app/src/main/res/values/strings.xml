@@ -4,8 +4,9 @@
     <string name="action_settings">Settings</string>
     <string name="action_share_key">Share Public Key...</string>
     <string name="action_publish_key">Publish Public Key...</string>
+    <string name="change_permissions">Change Permissions</string>
     <string name="verification_api_key">My_Key</string>
-
+Ardit
     <string name="action_about">About ProofMode</string>
 
     <string name="switch_include_device">Include Device Identity</string>
