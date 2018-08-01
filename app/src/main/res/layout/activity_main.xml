@@ -20,6 +20,9 @@
         />
 
     <include layout="@layout/content_media"
+        android:visibility="gone"
+        />
+    <include layout="@layout/content_media2"
         />
 
 
