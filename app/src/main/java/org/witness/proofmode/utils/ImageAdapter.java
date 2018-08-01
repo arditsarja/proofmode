@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +76,7 @@ public class ImageAdapter extends BaseAdapter {
             public void onClick(View v) {
                 String path = fileList.get(thePosition);
                 Intent intent = new Intent(activity, FullscreenActivity.class);
-                intent.putExtra("path",path);
+                intent.putExtra("path", path);
 //                File file = new File(path);
 ////                Uri uri = EasyImageFiles.getUriToFile(activity, file);
 //                Intent intent = new Intent();
@@ -102,7 +99,10 @@ public class ImageAdapter extends BaseAdapter {
 //        File file= new File(android.os.Environment.getExternalStorageDirectory(),"Lexally");
         if (file.isDirectory()) {
             listFile = file.listFiles();
-
+            if (listFile == null)
+                return;
+            if (listFile.length < 1)
+                return;
             for (int i = listFile.length - 1; i >= 0; i--) {
                 fileList.add(listFile[i].getAbsolutePath());
             }
