@@ -44,6 +44,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private ImageView mContentView;
     private Button button;
     private File file;
+    String pathFile;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -100,7 +101,7 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
-        String pathFile = getIntent().getExtras().getString("path");
+        pathFile = getIntent().getExtras().getString("path");
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
@@ -142,6 +143,8 @@ public class FullscreenActivity extends AppCompatActivity {
         } else {
             intent.setDataAndType(Uri.fromFile(file), "image/*");
         }
+        intent.putExtra("path", pathFile);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 
