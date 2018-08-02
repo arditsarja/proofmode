@@ -1,11 +1,13 @@
 package org.witness.proofmode;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -130,7 +132,7 @@ public class FullscreenActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                share();
+                share();
             }
         });
     }
@@ -138,14 +140,30 @@ public class FullscreenActivity extends AppCompatActivity {
     private void share() {
         Intent intent = new Intent(this, ShareProofActivity.class);
         intent.setAction(Intent.ACTION_SEND);
+        Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //use this if Lollipop_Mr1 (API 22) or above
-            intent.setDataAndType(FileProvider.getUriForFile(getBaseContext(), getBaseContext().getPackageName() + ".provider", file), "image/*");
+            uri = FileProvider.getUriForFile(getBaseContext(), getBaseContext().getPackageName() + ".provider", file);
         } else {
-            intent.setDataAndType(Uri.fromFile(file), "image/*");
+            uri = Uri.fromFile(file);
         }
+        intent.setDataAndType(uri, "image/*");
         intent.putExtra("path", pathFile);
+        intent.putExtra(Intent.EXTRA_STREAM, uri.toString());
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE,
+                file.getName());
+        values.put(MediaStore.Images.Media.DESCRIPTION,
+                "Image capture by camera");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put("_data", file.getAbsolutePath());
+        getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
         startActivity(intent);
+
+
     }
 
     @Override
