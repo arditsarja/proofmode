@@ -86,6 +86,7 @@ public class ImageAdapter extends BaseAdapter {
 //                } else {
 //                    intent.setDataAndType(Uri.fromFile(file), "image/*");
 //                }
+//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 activity.startActivity(intent);
             }
         });
