@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         SwitchCompat switchProof = findViewById(R.id.switchProof);
         switchProof.setChecked(mPrefs.getBoolean("doProof", true));
 
+        Log.d("Test","Test");
+
         switchProof.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
